@@ -24,7 +24,7 @@ def show_stack(stack, interval=50, axis=0, vmin=None, vmax=None):
     fig = plt.figure()
     slices = []
     for z in range(stack.shape[0]):
-        s = plt.imshow(stack[z], cmap='gray', vmin=None, vmax=None)
+        s = plt.imshow(stack[z], cmap='gray', vmin=vmin, vmax=vmax)
         slices.append([s])
 
     anim = animation.ArtistAnimation(fig, slices, interval=interval, repeat_delay=1000, blit=True)
@@ -43,7 +43,7 @@ def gif_stack(stack, filename, interval=50, axis=0, vmin=None, vmax=None):
     fig = plt.figure()
     slices = []
     for z in range(stack.shape[0]):
-        s = plt.imshow(stack[z], cmap='gray', vmin=None, vmax=None)
+        s = plt.imshow(stack[z], cmap='gray', vmin=vmin, vmax=vmax)
         slices.append([s])
 
     anim = animation.ArtistAnimation(fig, slices, interval=interval, repeat_delay=1000, blit=True)
