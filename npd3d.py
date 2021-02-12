@@ -17,10 +17,23 @@ or
 width = 2*rx
 height = 2*ry
 depth = 2*rz
+
+Rotation matrix
+RX =[[1, 0, 0],
+     [0, np.cos(rx), -np.sin(rx)],
+     [0, np.sin(rx), np.cos(rx)]]
+RY =[[np.cos(ry), 0, np.sin(ry)],
+     [0, 1, 0],
+     [-np.sin(ry), 0, np.cos(ry)]]
+RZ =[[np.cos(rz), -np.sin(rz), 0],
+     [np.sin(rz), np.cos(rz), 0],
+     [0, 0, 1]]
+
+RX * RY * RZ * [x, y, z]
 """
 
 
-def spheroid_coordinate(shape, center, radius, rotation_xy=None):
+def spheroid_coordinate(shape, center, radius, rotation=(None, None, None)):
     """
     return coordinates of point in the spheroid.
     rotation on the xy plan around the z axis.
@@ -31,25 +44,24 @@ def spheroid_coordinate(shape, center, radius, rotation_xy=None):
     x_rad, y_rad, z_rad = radius
     x, y, z = (x_lim - x_org), (y_lim - y_org), (z_lim - z_org)
 
-    if rotation_xy is None:
+    if rotation == (None, None, None):
         d = (x / x_rad) ** 2 + (y / y_rad) ** 2 + (z / z_rad) ** 2
     else:
-        rot = rotation_xy % np.pi
-        cos_a = np.cos(rot)
-        sin_a = np.sin(rot)
-
-        d = ((x * cos_a - y * sin_a) / x_rad) ** 2 + ((x * sin_a + y * cos_a) / y_rad) ** 2 + (z / z_rad) ** 2
+        r1, r2, r3 = rotation
+        d = ((x * np.cos(r2) * np.cos(r3) + z * np.sin(r2) - y * np.cos(r2) * np.sin(r3)) / x_rad) ** 2 \
+            + ((-z * np.cos(r2) * np.sin(r1) + x * (np.cos(r3) * np.sin(r1) * np.sin(r2) + np.cos(r1) * np.sin(r3)) + y * (np.cos(r1) * np.cos(r3) - np.sin(r1) * np.sin(r2) * np.sin(r3))) / y_rad) ** 2\
+            + ((z * np.cos(r1) * np.cos(r2) + x * (-np.cos(r1) * np.cos(r3) * np.sin(r2) + np.sin(r1) * np.sin(r3)) + y * (np.cos(r3) * np.sin(r1) + np.cos(r1) * np.sin(r2) * np.sin(r3))) / z_rad) ** 2
 
     return np.nonzero(d < 1)
 
 
-def spheroid(array, fill, center, radius, rotation_xy=None):
+def spheroid(array, fill, center, radius, rotation=(None, None, None)):
     """
     return the given array with a filled spheroid.
     warning: using the returned value is not mandatory.
              the array is passed by reference, if you want to avoid modification on the original array, use np.copy
     """
-    array[spheroid_coordinate(array.shape, center, radius, rotation_xy)] = fill
+    array[spheroid_coordinate(array.shape, center, radius, rotation)] = fill
     return array
 
 
