@@ -14,7 +14,7 @@ def show_image(image):
     return 0
 
 
-def show_stack(stack, interval=50, axis=0):
+def show_stack(stack, interval=50, axis=0, vmin=None, vmax=None):
     if len(stack.shape) != 3:
         return 1
 
@@ -24,7 +24,7 @@ def show_stack(stack, interval=50, axis=0):
     fig = plt.figure()
     slices = []
     for z in range(stack.shape[0]):
-        s = plt.imshow(stack[z], cmap='gray')
+        s = plt.imshow(stack[z], cmap='gray', vmin=None, vmax=None)
         slices.append([s])
 
     anim = animation.ArtistAnimation(fig, slices, interval=interval, repeat_delay=1000, blit=True)
@@ -33,7 +33,7 @@ def show_stack(stack, interval=50, axis=0):
     return 0
 
 
-def gif_stack(stack, filename, interval=50, axis=0):
+def gif_stack(stack, filename, interval=50, axis=0, vmin=None, vmax=None):
     if len(stack.shape) != 3:
         return 1
 
@@ -43,7 +43,7 @@ def gif_stack(stack, filename, interval=50, axis=0):
     fig = plt.figure()
     slices = []
     for z in range(stack.shape[0]):
-        s = plt.imshow(stack[z], cmap='gray')
+        s = plt.imshow(stack[z], cmap='gray', vmin=None, vmax=None)
         slices.append([s])
 
     anim = animation.ArtistAnimation(fig, slices, interval=interval, repeat_delay=1000, blit=True)
