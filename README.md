@@ -13,5 +13,5 @@ import npd3d
 * draw
 ```
 npd2d.ellipse(array, fill, center, radius, rotation)
-npd3d.spheroid(array, fill, center, radius, rotation_xy):
+npd3d.spheroid(array, fill, center, radius, rotations):
 ```
